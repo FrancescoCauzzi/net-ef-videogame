@@ -1,5 +1,7 @@
-﻿using net_ef_videogame.Models;
+﻿using net_ef_videogame.Database;
+using net_ef_videogame.Models;
 using static System.Console;
+using System;
 namespace net_ef_videogame
 {
     internal class Program
@@ -27,12 +29,38 @@ namespace net_ef_videogame
                         WriteLine("Insert the data of a new videogame");
                         Write("Insert the name of the videogame: ");
                         string name = InputChecker.GetStringInput();
+                        
                         Write("Insert the overview of the videogame: ");
                         string overview = InputChecker.GetStringInput();
                         Write("Insert the release dateof the videogame: ");
                         DateTime releaseDate = InputChecker.GetDateTimeInput();
                         Write("Insert the software house id: ");
-                        long softwareHouseId = (long)InputChecker.GetIntInput();
+                        long softwareHouseId = InputChecker.GetIntInput();
+                        /*
+                         * this type of instantiation gave me CS0272 error
+                        Videogame newVideogame = new Videogame() { 
+                            Name = name, 
+                            Overview = overview, 
+                            ReleaseDate = releaseDate, 
+                            SoftwareHouseId = softwareHouseId
+                        };
+                        */
+
+                        Videogame newVideogame = new Videogame( name, overview, releaseDate, softwareHouseId);
+
+
+                        using (VideogamesContext db = new VideogamesContext())
+                        {
+                            try {
+                                db.Add(newVideogame);
+                                db.SaveChanges();
+                                WriteLine("The videogame has been added");
+                            }
+                            catch (Exception ex) {
+                                WriteLine("There has been a problem in adding the videogame: " + ex.Message);
+                            }
+                            
+                        }
 
                         break;
                         
@@ -59,7 +87,41 @@ namespace net_ef_videogame
 
                         break;
                     case 5:
-                        WriteLine("Insert the data of the new software house: ")
+                        // insert a new software house
+                        WriteLine("Insert the data of the new software house: ");
+                        Write("Insert the name of the software house: ");
+                        string shName = InputChecker.GetStringInput();
+
+                        Write("Insert the tax-id of the software house: ");
+                        string shTaxId = InputChecker.GetStringInput();
+                        Write("Insert the city of the software house: ");
+                        string shCity = InputChecker.GetStringInput();
+                        Write("Insert the country of the software house: ");
+                        string shCountry = InputChecker.GetStringInput();
+                        
+                        SoftwareHouse newSoftwareHouse = new SoftwareHouse()
+                        {
+                            SoftwareHouseName = shName,
+                            SoftwareHouseTaxId = shTaxId,
+                            SoftwareHouseCity = shCity,
+                            SoftwareHouseCountry = shCountry
+                        };
+
+                       
+                        using (VideogamesContext db = new VideogamesContext())
+                        {
+                            try
+                            {
+                                db.Add(newSoftwareHouse);
+                                db.SaveChanges();
+                                WriteLine("The software house has been added");
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteLine("There has been a problem in adding the software house: " + ex.Message);
+                            }
+
+                        }
 
                         break;
 
