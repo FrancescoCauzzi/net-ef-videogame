@@ -94,8 +94,25 @@ namespace net_ef_videogame
                     case 3:
                         Write("Insert the snippet of the name of the videogame you are looking for: ");
                         string videogameSnippet = InputChecker.GetStringInput();
-                        
+                        using (VideogamesContext db = new VideogamesContext())
+                        {
+                            // Use LINQ to query the database for videogames that contain the snippet in their name
+                            List<Videogame> videogamesByName = db.Videogames.Where(v => v.Name.Contains(videogameSnippet)).ToList();
 
+                            // Check if any videogames were found
+                            if (videogamesByName.Count > 0)
+                            {
+                                WriteLine("Videogames found:");
+                                foreach (Videogame videogame in videogamesByName)
+                                {
+                                    WriteLine(videogame.ToString());
+                                }
+                            }
+                            else
+                            {
+                                WriteLine("No videogames found with that name snippet.");
+                            }
+                        }
                         break;
 
                     case 4:
