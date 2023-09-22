@@ -68,6 +68,24 @@ namespace net_ef_videogame
                     case 2:
                         Write("Insert the id of the videogame you are looking for: ");
                         long videogameId = InputChecker.GetIntInput();
+                        // LINQ method syntax
+                        //search videogame by its id
+                        using (VideogamesContext db = new VideogamesContext())
+                        {
+                            try
+                            {
+                                //WriteLine("The videogame has been added");
+                                Videogame vgById = db.Videogames.Where(videogame => videogame.Id == videogameId).FirstOrDefault();
+                                WriteLine(vgById);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteLine("There has been a problem in adding the videogame: " + ex.Message);
+                            }
+
+                        }
+                        
                         
 
 
