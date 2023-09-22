@@ -12,12 +12,19 @@ namespace net_ef_videogame.Models
         [Key]
         public long SoftwareHouseId { get; set; }
 
+        [MaxLength(255)]
         public string SoftwareHouseName { get; set; }
+
+        [MaxLength(255)]
         public string SoftwareHouseTaxId { get; set; }
+
+        [MaxLength(255)]
         public string SoftwareHouseCity  { get; set; }
+
+        [MaxLength(255)]
         public string SoftwareHouseCountry { get; set; }
 
-        // relazione uno a molti (la SH produce possiede molti games)
-        public List<Videogame> Videogame { get; set; }
+        // relazione uno a molti (la SH produce/possiede molti games)
+        public List<Videogame> Videogames { get; set; }
     }
 }
