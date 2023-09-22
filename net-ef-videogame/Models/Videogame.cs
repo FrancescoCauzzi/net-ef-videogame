@@ -18,18 +18,11 @@ namespace net_ef_videogame.Models
 
         public DateTime ReleaseDate { get; private set; }
 
-        public long SoftwareHouseId { get; private set; }
 
-        /*
-        public Videogame(long id, string name, string overview, DateTime releaseDate, long softwareHouseId)
-        {
-            Id = id;
-            Name = name;
-            Overview = overview;
-            ReleaseDate = releaseDate;
-            SoftwareHouseId = softwareHouseId;
-        }
-        */
+        // relazione uno a molti, ogni videogame può avere solo una sh che lo produce ma la sh produce più videogames
+        public long SoftwareHouseId { get; private set; }
+        public SoftwareHouse SoftwareHouse { get; private set; }
+        
 
         // override ToSTring()
         public override string ToString()

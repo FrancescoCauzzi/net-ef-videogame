@@ -16,5 +16,8 @@ namespace net_ef_videogame.Models
         public string SoftwareHouseTaxId { get; set; }
         public string SoftwareHouseCity  { get; set; }
         public string SoftwareHouseCountry { get; set; }
+
+        // relazione uno a molti (la SH produce possiede molti games)
+        public List<Videogame> Videogame { get; set; }
     }
 }
