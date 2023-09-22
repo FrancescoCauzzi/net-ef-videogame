@@ -14,14 +14,15 @@ namespace net_ef_videogame
             - 3: find a videogame by a string snippet matching its name
             - 4: delete a specific videogame by its id
             - 5: insert a new software house
-            - 6: close the program";
+            - 6: get all the videogames of a specific software house
+            - 7: close the program";
             WriteLine("Welcome to our videogame manager console app!");
             Write(welcomeMessage);
             WriteLine();
             Write("Insert a command: ");
             int selectedOption = InputChecker.GetIntInput();
             WriteLine();
-            while (selectedOption != 6)
+            while (selectedOption != 7)
             {
                 switch (selectedOption)
                 {
@@ -118,9 +119,34 @@ namespace net_ef_videogame
                     case 4:
                         Write("Insert the id of the videogame you want to delete: ");
                         long idVideogameToDelete = InputChecker.GetIntInput();
-                        
+                        using (VideogamesContext db = new VideogamesContext())
+                        {
+                            try
+                            {
+                                // Find the videogame by its ID
+                                Videogame videogameToDelete = db.Videogames.First(v => v.Id == idVideogameToDelete);
 
-                        break;
+                                // Remove the videogame from the DbContext
+                                db.Videogames.Remove(videogameToDelete);
+
+                                // Save changes to the database
+                                db.SaveChanges();
+
+                                WriteLine("The videogame has been deleted.");
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                WriteLine("No videogame found with that ID.");
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteLine($"An error occurred: {ex.Message}");
+                            }
+
+                        }
+
+
+                         break;
                     case 5:
                         // insert a new software house
                         WriteLine("Insert the data of the new software house: ");
@@ -157,6 +183,18 @@ namespace net_ef_videogame
                             }
 
                         }
+
+                        break;
+                        case 6:
+                        WriteLine("Here are all the software houses in our db with the associated id");
+                        List<SoftwareHouse> shList = VideogameManager.GetAllSoftwareHouses();
+                        
+                        foreach(SoftwareHouse sh in shList)
+                        {
+                            WriteLine($"{sh.SoftwareHouseId}. {sh}");
+                        }
+
+
 
                         break;
 

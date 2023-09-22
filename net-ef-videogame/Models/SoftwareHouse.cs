@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,5 +27,11 @@ namespace net_ef_videogame.Models
 
         // relazione uno a molti (la SH produce/possiede molti games)
         public List<Videogame> Videogames { get; set; }
+
+        public override string ToString()
+        {
+            return SoftwareHouseName;
+
+        }
     }
 }
