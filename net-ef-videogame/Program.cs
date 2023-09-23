@@ -30,123 +30,91 @@ namespace net_ef_videogame
                         WriteLine("Insert the data of a new videogame");
                         Write("Insert the name of the videogame: ");
                         string name = InputChecker.GetStringInput();
-                        
                         Write("Insert the overview of the videogame: ");
                         string overview = InputChecker.GetStringInput();
                         Write("Insert the release dateof the videogame: ");
                         DateTime releaseDate = InputChecker.GetDateTimeInput();
-                        Write("Insert the software house id: ");
-                        long softwareHouseId = InputChecker.GetIntInput();
-                        /*
-                         * this type of instantiation gave me CS0272 error
-                        Videogame newVideogame = new Videogame() { 
-                            Name = name, 
-                            Overview = overview, 
-                            ReleaseDate = releaseDate, 
-                            SoftwareHouseId = softwareHouseId
-                        };
-                        */
-
-                        Videogame newVideogame = new Videogame( name, overview, releaseDate, softwareHouseId);
-
-
-                        using (VideogamesContext db = new VideogamesContext())
+                        try
                         {
-                            try {
-                                db.Add(newVideogame);
-                                db.SaveChanges();
+                            List<SoftwareHouse> shList = VideogameManager.GetAllSoftwareHouses();
+                            WriteLine("Insert the software house id: ");
+                            WriteLine("The software house available are: ");
+                            foreach (SoftwareHouse sh in shList)
+                            {
+                                WriteLine($"{sh.SoftwareHouseId}. {sh}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteLine(ex.Message);
+                        }
+                        long softwareHouseId = InputChecker.GetIntInput();
+
+                        try
+                        {
+                            bool isVideogameInserted = VideogameManager.InsertVideogame(name, overview, releaseDate, softwareHouseId);
+                            if (isVideogameInserted)
+                            {
                                 WriteLine("The videogame has been added");
                             }
-                            catch (Exception ex) {
-                                WriteLine("There has been a problem in adding the videogame: " + ex.Message);
-                            }
-                            
                         }
-
+                        catch (Exception ex)
+                        {
+                            WriteLine(ex.Message);
+                        }
                         break;
-                        
-
                     case 2:
                         Write("Insert the id of the videogame you are looking for: ");
                         long videogameId = InputChecker.GetIntInput();
-                        // LINQ method syntax
-                        //search videogame by its id
-                        using (VideogamesContext db = new VideogamesContext())
+                        try
                         {
-                            try
-                            {
-                                //WriteLine("The videogame has been added");
-                                Videogame vgById = db.Videogames.Where(videogame => videogame.Id == videogameId).FirstOrDefault();
-                                WriteLine(vgById);
-
-                            }
-                            catch (Exception ex)
-                            {
-                                WriteLine("There has been a problem in adding the videogame: " + ex.Message);
-                            }
-
+                            Videogame videogame = VideogameManager.GetVideoGameByItsId(videogameId);
+                            WriteLine("We have found the following videogame: ");
+                            WriteLine(videogame.ToString());
                         }
-                        
-                        
-
-
+                        catch (Exception ex)
+                        {
+                            WriteLine(ex.Message);
+                        }
                         break;
 
                     case 3:
                         Write("Insert the snippet of the name of the videogame you are looking for: ");
                         string videogameSnippet = InputChecker.GetStringInput();
-                        using (VideogamesContext db = new VideogamesContext())
+                        try
                         {
-                            // Use LINQ to query the database for videogames that contain the snippet in their name
-                            List<Videogame> videogamesByName = db.Videogames.Where(v => v.Name.Contains(videogameSnippet)).ToList();
-
-                            // Check if any videogames were found
-                            if (videogamesByName.Count > 0)
+                            List<Videogame> videogameList = VideogameManager.GetAllVideoGamesByStringSnippet(videogameSnippet);
+                            if (videogameList.Count == 0)
                             {
-                                WriteLine("Videogames found:");
-                                foreach (Videogame videogame in videogamesByName)
+                                WriteLine("No videogames found.");
+                            }
+                            else
+                            {
+                                WriteLine("We have found the following videogames: ");
+                                foreach (Videogame videogame in videogameList)
                                 {
                                     WriteLine(videogame.ToString());
                                 }
                             }
-                            else
-                            {
-                                WriteLine("No videogames found with that name snippet.");
-                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteLine(ex.Message);
                         }
                         break;
 
                     case 4:
                         Write("Insert the id of the videogame you want to delete: ");
                         long idVideogameToDelete = InputChecker.GetIntInput();
-                        using (VideogamesContext db = new VideogamesContext())
+                        try
                         {
-                            try
-                            {
-                                // Find the videogame by its ID
-                                Videogame videogameToDelete = db.Videogames.First(v => v.Id == idVideogameToDelete);
-
-                                // Remove the videogame from the DbContext
-                                db.Videogames.Remove(videogameToDelete);
-
-                                // Save changes to the database
-                                db.SaveChanges();
-
-                                WriteLine("The videogame has been deleted.");
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                WriteLine("No videogame found with that ID.");
-                            }
-                            catch (Exception ex)
-                            {
-                                WriteLine($"An error occurred: {ex.Message}");
-                            }
-
+                            bool isDeleted = VideogameManager.DeleteAVideogame(idVideogameToDelete);
                         }
-
-
-                         break;
+                        catch (Exception ex)
+                        {
+                            WriteLine("There has bee a problem in deleting the videogame: " + ex.Message);
+                        }
+                        break;
                     case 5:
                         // insert a new software house
                         WriteLine("Insert the data of the new software house: ");
@@ -159,74 +127,66 @@ namespace net_ef_videogame
                         string shCity = InputChecker.GetStringInput();
                         Write("Insert the country of the software house: ");
                         string shCountry = InputChecker.GetStringInput();
-                        
-                        SoftwareHouse newSoftwareHouse = new SoftwareHouse()
+                        try
                         {
-                            SoftwareHouseName = shName,
-                            SoftwareHouseTaxId = shTaxId,
-                            SoftwareHouseCity = shCity,
-                            SoftwareHouseCountry = shCountry
-                        };
-
-                       
-                        using (VideogamesContext db = new VideogamesContext())
-                        {
-                            try
+                            bool isSHInserted = VideogameManager.InsertASoftwareHouse(shName, shTaxId, shCity, shCountry);
+                            if (isSHInserted)
                             {
-                                db.Add(newSoftwareHouse);
-                                db.SaveChanges();
                                 WriteLine("The software house has been added");
                             }
-                            catch (Exception ex)
-                            {
-                                WriteLine("There has been a problem in adding the software house: " + ex.Message);
-                            }
-
                         }
-
-                        break;
-                        case 6:
-                        List<SoftwareHouse> shList = VideogameManager.GetAllSoftwareHouses();
-                        if(shList.Count > 0)
+                        catch (Exception ex)
                         {
-                        WriteLine("Here are all the software houses in our db with the associated id");
-                            foreach(SoftwareHouse sh in shList)
+                            WriteLine(ex.Message);
+                        }
+                        break;
+                    case 6:
+                        try
+                        {
+                            List<SoftwareHouse> shList = VideogameManager.GetAllSoftwareHouses();
+                            if (shList.Count > 0)
                             {
-                                WriteLine($"{sh.SoftwareHouseId}. {sh}");
-                            }
-                            Write("Select a software house by its id you wish to see its games: ");
-                            long shIdSelected = InputChecker.GetIntInput();
-                            List<Videogame> gameList = VideogameManager.GetVideoGameListBySHId(shIdSelected);
-                            if (gameList.Count > 0)
-                            {
-                                foreach (Videogame game in gameList)
+                                WriteLine("Here are all the software houses in our db with the associated id");
+                                foreach (SoftwareHouse sh in shList)
                                 {
-                                    WriteLine($"{game}");
+                                    WriteLine($"{sh.SoftwareHouseId}. {sh}");
                                 }
-
+                                Write("Select a software house by its id you wish to see its games: ");
+                                long shIdSelected = InputChecker.GetIntInput();
+                                try
+                                {
+                                    List<Videogame> gameList = VideogameManager.GetVideoGameListBySHId(shIdSelected);
+                                    if (gameList.Count > 0)
+                                    {
+                                        foreach (Videogame game in gameList)
+                                        {
+                                            WriteLine($"{game}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        WriteLine("There are no videogames available for this software house");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    WriteLine("There has been a problem in getting the gemas: " + ex.Message);
+                                }
                             }
                             else
                             {
-                                WriteLine("There are no videogames available for this software house");
+                                WriteLine("There are no software houses available in our database");
                             }
-
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            WriteLine("There are no software houses available in our database");
+                            WriteLine("There has been a problem in getting the software houses: " + ex.Message);
                         }
-                        
-                        
-
-
-
-
                         break;
 
                     default:
                         WriteLine("Invalid option");
                         break;
-
                 }
                 WriteLine();
                 WriteLine("What do you want to do now?");
@@ -235,7 +195,6 @@ namespace net_ef_videogame
                 selectedOption = InputChecker.GetIntInput();
                 WriteLine();
             }
-
         }
     }
 }

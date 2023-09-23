@@ -24,12 +24,12 @@ namespace net_ef_videogame.Models
 
         // relazione uno a molti, ogni videogame può avere solo una sh che lo produce ma la sh produce più videogames
         public long SoftwareHouseId { get; private set; }
-        public SoftwareHouse SoftwareHouse { get; private set; }
+        public SoftwareHouse? SoftwareHouse { get; private set; }
 
         // Constructor
-        public Videogame( string name, string overview, DateTime releaseDate, long softwareHouseId)
+        public Videogame(string name, string overview, DateTime releaseDate, long softwareHouseId)
         {
-            
+
             Name = name;
             Overview = overview;
             ReleaseDate = releaseDate;
