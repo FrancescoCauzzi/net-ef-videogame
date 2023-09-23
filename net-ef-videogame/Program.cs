@@ -193,6 +193,14 @@ namespace net_ef_videogame
                         {
                             WriteLine($"{sh.SoftwareHouseId}. {sh}");
                         }
+                        Write("Select a software house by its id you wish to see its games: ");
+                        long shIdSelected = InputChecker.GetIntInput();
+                        List<Videogame> gameList = VideogameManager.GetVideoGameListBySHId(shIdSelected);
+                        foreach(Videogame game in gameList)
+                        {
+                            WriteLine($"{game}");
+                        }
+
 
 
 

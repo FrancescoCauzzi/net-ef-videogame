@@ -10,17 +10,13 @@ namespace net_ef_videogame
 {
     public static class VideogameManager
     {
-        public static List<Videogame> GetVideoGameListBySHId(int shId)
+        public static List<Videogame> GetVideoGameListBySHId(long shId)
         {
             using (VideogamesContext db = new VideogamesContext())
             {
                 List<Videogame> videogamesBySHId = db.Videogames.Where(v => v.SoftwareHouseId == shId).ToList();
                  return videogamesBySHId;
-
             }
-
-
-
         }
 
         public static List<SoftwareHouse> GetAllSoftwareHouses()
@@ -30,7 +26,6 @@ namespace net_ef_videogame
                 List<SoftwareHouse> allSoftwareHouses = db.SoftwareHouse.ToList();
                 return allSoftwareHouses;
             }
-
         }
     }
 }
