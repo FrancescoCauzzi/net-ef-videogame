@@ -186,20 +186,37 @@ namespace net_ef_videogame
 
                         break;
                         case 6:
-                        WriteLine("Here are all the software houses in our db with the associated id");
                         List<SoftwareHouse> shList = VideogameManager.GetAllSoftwareHouses();
+                        if(shList.Count > 0)
+                        {
+                        WriteLine("Here are all the software houses in our db with the associated id");
+                            foreach(SoftwareHouse sh in shList)
+                            {
+                                WriteLine($"{sh.SoftwareHouseId}. {sh}");
+                            }
+                            Write("Select a software house by its id you wish to see its games: ");
+                            long shIdSelected = InputChecker.GetIntInput();
+                            List<Videogame> gameList = VideogameManager.GetVideoGameListBySHId(shIdSelected);
+                            if (gameList.Count > 0)
+                            {
+                                foreach (Videogame game in gameList)
+                                {
+                                    WriteLine($"{game}");
+                                }
+
+                            }
+                            else
+                            {
+                                WriteLine("There are no videogames available for this software house");
+                            }
+
+                        }
+                        else
+                        {
+                            WriteLine("There are no software houses available in our database");
+                        }
                         
-                        foreach(SoftwareHouse sh in shList)
-                        {
-                            WriteLine($"{sh.SoftwareHouseId}. {sh}");
-                        }
-                        Write("Select a software house by its id you wish to see its games: ");
-                        long shIdSelected = InputChecker.GetIntInput();
-                        List<Videogame> gameList = VideogameManager.GetVideoGameListBySHId(shIdSelected);
-                        foreach(Videogame game in gameList)
-                        {
-                            WriteLine($"{game}");
-                        }
+                        
 
 
 
