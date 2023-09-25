@@ -47,7 +47,7 @@ namespace net_ef_videogame
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("There has been a problem in geatting the videogame: " + ex.Message);
+                    throw new Exception("There has been a problem in getting the videogame: " + ex.Message);
                 }
             }
         }
@@ -69,7 +69,6 @@ namespace net_ef_videogame
 
             }
             return videogamesByName;
-
         }
 
         public static bool DeleteAVideogame(long vGId)
@@ -95,7 +94,7 @@ namespace net_ef_videogame
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("There has bee a problem in deleting the videogame: " + ex.Message);
             }
             return isDeleted;
         }
@@ -134,13 +133,11 @@ namespace net_ef_videogame
                     List<Videogame> videogamesBySHId = db.Videogames.Where(v => v.SoftwareHouseId == shId).ToList();
                     return videogamesBySHId;
                 }
-
             }
             catch (Exception ex)
             {
                 throw new Exception("An error has occured: " + ex.Message);
             }
-
         }
 
         public static List<SoftwareHouse> GetAllSoftwareHouses()

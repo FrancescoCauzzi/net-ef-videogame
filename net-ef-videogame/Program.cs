@@ -32,7 +32,7 @@ namespace net_ef_videogame
                         string name = InputChecker.GetStringInput();
                         Write("Insert the overview of the videogame: ");
                         string overview = InputChecker.GetStringInput();
-                        Write("Insert the release dateof the videogame: ");
+                        Write("Insert the release date of the videogame: ");
                         DateTime releaseDate = InputChecker.GetDateTimeInput();
                         try
                         {
@@ -112,7 +112,7 @@ namespace net_ef_videogame
                         }
                         catch (Exception ex)
                         {
-                            WriteLine("There has bee a problem in deleting the videogame: " + ex.Message);
+                            WriteLine(ex.Message);
                         }
                         break;
                     case 5:
@@ -170,7 +170,7 @@ namespace net_ef_videogame
                                 }
                                 catch (Exception ex)
                                 {
-                                    WriteLine("There has been a problem in getting the gemas: " + ex.Message);
+                                    WriteLine(ex.Message);
                                 }
                             }
                             else
@@ -180,7 +180,7 @@ namespace net_ef_videogame
                         }
                         catch (Exception ex)
                         {
-                            WriteLine("There has been a problem in getting the software houses: " + ex.Message);
+                            WriteLine(ex.Message);
                         }
                         break;
 
